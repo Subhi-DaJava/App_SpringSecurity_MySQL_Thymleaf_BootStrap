@@ -16,7 +16,7 @@ public class PatientsMvcApplication {
         SpringApplication.run(PatientsMvcApplication.class, args);
     }
 
-    @Bean    //injecter PatientRepository
+ /*   @Bean    //injecter PatientRepository
     CommandLineRunner commandLineRunner(PatientRepository patientRepository){
         return args -> {
             patientRepository.save(
@@ -32,6 +32,6 @@ public class PatientsMvcApplication {
                 System.out.println(patient.getNom());
             });
         };
-    }
+    }*/
 
 }
