@@ -1,5 +1,7 @@
 package com.ocr.patientsmvc.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,6 +14,8 @@ public class Patient {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_naissance")
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateNaissance;
 
     private boolean malade;

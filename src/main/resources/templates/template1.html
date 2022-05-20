@@ -30,10 +30,12 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" th:href="@{/formPatients}">Nouveau Patient</a></li>
                     <li><a class="dropdown-item" th:href="@{index}">Chercher Patients</a></li>
-                    <li><a class="dropdown-item" th:href="@{/getMedecins}">Médecin</a></li>
+                    <li><a class="dropdown-item" th:href="@{/medecins}">Médecin</a></li>
                 </ul>
             </li>
-            <!--Authentification/logout/consulter le compte etc-->
+        </ul>
+        <ul class="navbar-nav">
+            <!--Affiché à droite, Authentification/logout/consulter le compte etc-->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                     [UserName]
