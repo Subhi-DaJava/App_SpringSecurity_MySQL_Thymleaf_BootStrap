@@ -1,8 +1,10 @@
 package com.ocr.patientsmvc.model;
 
+import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -10,15 +12,20 @@ import java.util.Date;
 public class Patient {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty
+    @Size(min = 4, max = 40)
     private String nom;
+
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_naissance")
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date dateNaissance;
 
     private boolean malade;
+    @DecimalMin("100")
     private int score;
 
     public Patient() {
