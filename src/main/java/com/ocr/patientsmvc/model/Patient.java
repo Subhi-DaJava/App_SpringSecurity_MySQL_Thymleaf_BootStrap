@@ -11,7 +11,9 @@ public class Patient {
     private String nom;
 
     @Temporal(TemporalType.DATE)
+    @Column(name = "date_naissance")
     private Date dateNaissance;
+
     private boolean malade;
     private int score;
 

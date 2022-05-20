@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,7 +11,7 @@
         <div class="card-header"><h3>List des patients</h3></div>
         <div class="card-body">
             <table class="table">
-                <!-- Faut rajouter thead pour séparer tbody, important pour Bootstrap 5 -->
+                <!-- Faut rajouter thead pour séparer tbody de thead, important pour Bootstrap 5 -->
                 <thead>
                 <tr>
                     <th>ID</th><th>Nom</th><th>Date</th><th>Malade</th><th>Score</th>
@@ -27,6 +27,14 @@
                 </tr>
                 </tbody>
             </table>
+            <ul class="nav nav-pills">
+                <li th:each="page, status:${pages}">
+                    <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
+                    th:text="${status.index}"
+                    th:href="@{index(page=${status.index})}">
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

@@ -9,13 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 
 @Controller
 public class PatientController {
+    //l'injection de dépendance
     private PatientRepository patientRepository;
-
+    //l'injection avec Constructeur
     public PatientController(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
@@ -26,7 +25,9 @@ public class PatientController {
                            @RequestParam(name = "size", defaultValue = "5") int size){
         Page<Patient> pagePatients = patientRepository.findAll(PageRequest.of(page,size));
         model.addAttribute("listPatients",pagePatients.getContent());
-        return "patients";
+        model.addAttribute("pages",new int[pagePatients.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "patients"; //c'est une vue
     }
 
 }
