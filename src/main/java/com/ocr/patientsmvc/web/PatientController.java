@@ -56,17 +56,32 @@ public class PatientController {
     }
 
     @GetMapping("/formPatients")
-    public String getFormPatients(Model model){
+    public String formPatients(Model model){
         model.addAttribute("patient",new Patient());
         return "formPatients";
     }
 
-    @PostMapping(path = "/save") String savePatient(Model model, @Valid Patient patient, BindingResult bindingResult){
+    @PostMapping(path = "/save") String save(Model model, @Valid Patient patient, BindingResult bindingResult,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "") String keyword){
         if(bindingResult.hasErrors())
             return "formPatients";
-
         patientRepository.save(patient);
-        return "redirect:/index";  //"/formPatients"; // pourrai être d'autres pages//confirmation
+
+        return "redirect:/index?page="+page+"&keyword="+keyword;  //"/formPatients"; // pourrai être d'autres pages//confirmation
+    }
+
+    @GetMapping("/editPatient")
+    public String editPatient(Model model, Long id, String keyword, int page){
+        Patient patient = patientRepository.findById(id).orElse(null);
+        if (patient == null)
+            throw new RuntimeException("Patient introuvable !!");
+
+        model.addAttribute("patient", patient);
+        model.addAttribute("page", page);
+        model.addAttribute("keyword", keyword);
+
+        return "editPatient";
     }
 
 
