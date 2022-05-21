@@ -48,8 +48,9 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin();
         //Autoriser les users pour accéder à des pages
-        http.authorizeHttpRequests().antMatchers("/delete/**","/save/**","/edit/**","/formPatients/**").hasRole("ADMIN");
-        http.authorizeHttpRequests().antMatchers("/index/**").hasRole("USER");
+        http.authorizeHttpRequests().antMatchers("/").permitAll(); //ça ne nécessite pas à une authentification
+        http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
+        http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.exceptionHandling().accessDeniedPage("/403");
         return http.build();

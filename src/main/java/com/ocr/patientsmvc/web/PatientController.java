@@ -25,7 +25,7 @@ public class PatientController {
         this.patientRepository = patientRepository;
     }
 
-    @GetMapping(path = "/index")
+    @GetMapping(path = "/user/index")
     public String patients(Model model,
                            @RequestParam(name = "page",defaultValue = "0") int page,
                            @RequestParam(name = "size", defaultValue = "5") int size,
@@ -41,40 +41,40 @@ public class PatientController {
         return "patients"; //c'est une vue
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/admin/delete")
     public String delete(Long id, String keyword, int page){
         patientRepository.deleteById(id);
-        return "redirect:/index?page="+page+"&keyword="+keyword;
+        return "redirect:/user/index?page="+page+"&keyword="+keyword;
     }
 
     @GetMapping("/")
     public String home(){
-        return "redirect:/index";
+        return "home";
     }
 
-    @GetMapping("/patients") //sérialiser, pour Angular
+    @GetMapping("/user/patients") //sérialiser, pour Angular, données fournées au format JSON
     @ResponseBody
     public List<Patient> listPatients(){
         return patientRepository.findAll();
     }
 
-    @GetMapping("/formPatients")
+    @GetMapping("/admin/formPatients")
     public String formPatients(Model model){
         model.addAttribute("patient",new Patient());
         return "formPatients";
     }
 
-    @PostMapping(path = "/save") String save(Model model, @Valid Patient patient, BindingResult bindingResult,
+    @PostMapping(path = "/admin/save") String save(Model model, @Valid Patient patient, BindingResult bindingResult,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "") String keyword){
         if(bindingResult.hasErrors())
             return "formPatients";
         patientRepository.save(patient);
 
-        return "redirect:/index?page="+page+"&keyword="+keyword;  //"/formPatients"; // pourrai être d'autres pages//confirmation
+        return "redirect:/user/index?page="+page+"&keyword="+keyword;  //"/formPatients"; // pourrai être d'autres pages//confirmation
     }
 
-    @GetMapping("/editPatient")
+    @GetMapping("/admin/editPatient")
     public String editPatient(Model model, Long id, String keyword, int page){
         Patient patient = patientRepository.findById(id).orElse(null);
         if (patient == null)
