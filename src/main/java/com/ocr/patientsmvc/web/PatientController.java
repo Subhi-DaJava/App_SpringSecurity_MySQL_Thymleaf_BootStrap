@@ -30,11 +30,14 @@ public class PatientController {
                            @RequestParam(name = "page",defaultValue = "0") int page,
                            @RequestParam(name = "size", defaultValue = "5") int size,
                            @RequestParam(name = "keyword", defaultValue = "") String keyword){
+
         Page<Patient> pagePatients = patientRepository.findByNomContains(keyword, PageRequest.of(page,size));
-        model.addAttribute("listPatients",pagePatients.getContent());
-        model.addAttribute("pages",new int[pagePatients.getTotalPages()]);
+
+        model.addAttribute("listPatients", pagePatients.getContent());
+        model.addAttribute("pages", new int[pagePatients.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        model.addAttribute("keyword",keyword);
+        model.addAttribute("keyword", keyword);
+
         return "patients"; //c'est une vue
     }
 
@@ -49,9 +52,9 @@ public class PatientController {
         return "redirect:/index";
     }
 
-    @GetMapping("/patients") //sérialiser
+    @GetMapping("/patients") //sérialiser, pour Angular
     @ResponseBody
-    public List<Patient> getPatients(){
+    public List<Patient> listPatients(){
         return patientRepository.findAll();
     }
 
