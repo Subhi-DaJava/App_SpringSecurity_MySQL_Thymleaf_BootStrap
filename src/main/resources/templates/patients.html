@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="template1"
+      layout:decorate="template_general"
 >
 <!--Au-dessous associé template1 avec patients-->
 <head>
@@ -10,7 +10,7 @@
     <title>Title</title>
 </head>
 <body>
-<div layout:fragment="content1">
+<div layout:fragment="content_general">
     <div class="container mt-3">
         <div class="card">
             <div class="card-header"><h3>List des patients</h3></div>
@@ -36,13 +36,13 @@
                         <td th:text="${patient.malade}"></td>
                         <td th:text="${patient.score}"></td>
                         <!--Afficher ce menu uniquement pour ADMIN-->
-                        <td sec:authorize="hasRole('ADMIN')">
+                        <td sec:authorize="hasAuthority('ADMIN')">
                             <a onclick="return confirm('Êtes vous sure de supprimer ce patient ?')" class="btn btn-danger" th:href="@{/admin/delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}">
                                 Delete
                             </a>
                         </td>
                         <!--Afficher ce menu uniquement pour ADMIN-->
-                        <td sec:authorize="hasRole('ADMIN')">
+                        <td sec:authorize="hasAuthority('ADMIN')">
                             <a class="btn btn-success" th:href="@{/admin/editPatient(id=${patient.id}, keyword=${keyword}, page=${currentPage})}">
                                 Edit
                             </a>

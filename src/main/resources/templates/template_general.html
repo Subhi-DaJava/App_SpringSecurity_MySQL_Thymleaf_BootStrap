@@ -31,7 +31,7 @@
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Patients</a>
                 <ul class="dropdown-menu">
                     <!--affichage uniquement pour les admins-->
-                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/formPatients}">Nouveau Patient</a></li>
+                    <li sec:authorize="hasAuthority('ADMIN')"><a class="dropdown-item" th:href="@{/admin/formPatients}">Nouveau Patient</a></li>
                     <li><a class="dropdown-item" th:href="@{/user/index}">Chercher Patients</a></li>
                     <li><a class="dropdown-item" th:href="@{/user/medecins}">Médecin</a></li>
                 </ul>
@@ -58,7 +58,7 @@
     </div>
 </nav>
 <!--Mettre le contenu dans cette section, dans ce cas, patients.html-->
-<section layout:fragment="content1"></section>
+<section layout:fragment="content_general"></section>
 
 <!-- Black background with white text -->
 <!--<nav class="navbar navbar-expand-sm bg-dark navbar-dark">...</nav>-->

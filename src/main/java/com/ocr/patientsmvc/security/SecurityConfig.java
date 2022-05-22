@@ -1,5 +1,7 @@
 package com.ocr.patientsmvc.security;
 
+import com.ocr.patientsmvc.security.service.UserDetailsServiceImpl;
+import org.hibernate.result.UpdateCountOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +32,13 @@ Spring Security without the WebSecurityConfigurerAdapter
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     //In-Memory Authentication pour tester l'application utiliser la mémoire
   /*  @Bean
     public InMemoryUserDetailsManager userDetailsService(){
@@ -58,18 +67,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new InMemoryUserDetailsManager(user,user2,admin);
     }*/
     // https://www.baeldung.com/spring-security-jdbc-authentication
-    @Autowired
-    private DataSource dataSource;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        PasswordEncoder passwordEncoder = passwordEncoder();
+  /*      PasswordEncoder passwordEncoder = passwordEncoder();
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select username as principal, password as credentials, active from users where username=?")
                 .authoritiesByUsernameQuery("select username as principal, role as role from users_roles where username=?")
                 .rolePrefix("ROLE_")
-                .passwordEncoder(passwordEncoder);
+                .passwordEncoder(passwordEncoder);*/
+
+        //Authentification avec springboot userDetailsService
+        auth.userDetailsService(userDetailsService);
 
     }
     @Override
@@ -77,8 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin();
         //Autoriser les users pour accéder à des pages
         http.authorizeHttpRequests().antMatchers("/").permitAll(); //ça ne nécessite pas à une authentification
-        http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
-        http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
+        http.authorizeHttpRequests().antMatchers("/admin/**").hasAuthority("ADMIN"); //pour les UserDetailsService
+        http.authorizeHttpRequests().antMatchers("/user/**").hasAuthority("USER");  //pour les UserDetailsService
 
         //Autoriser les ressources statics
         http.authorizeHttpRequests().antMatchers("/webjars/**").permitAll();
@@ -87,11 +98,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedPage("/403");
     }
 
+/*    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        PasswordEncoder passwordEncoder = passwordEncoder();
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select username as principal, password as credentials, active from users where username=?")
+                .authoritiesByUsernameQuery("select username as principal, role as role from users_roles where username=?")
+                .rolePrefix("ROLE_")
+                .passwordEncoder(passwordEncoder);
+    }*/
+
 
   /*  @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin();
         //Autoriser les users pour accéder à des pages
+        http.authorizeHttpRequests().antMatchers("/").permitAll(); //ça ne nécessite pas à une authentification
         http.authorizeHttpRequests().antMatchers("/").permitAll(); //ça ne nécessite pas à une authentification
         http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
         http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
@@ -100,10 +123,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return http.build();
     }*/
 
-    @Bean
-    PasswordEncoder passwordEncoder(){
-
-        return new BCryptPasswordEncoder();
-    }
 
 }

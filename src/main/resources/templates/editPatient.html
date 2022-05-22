@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="template1"
+      layout:decorate="template_general"
 >
 <!--Au-dessous associé template1 avec patients-->
 <head>
@@ -9,7 +9,7 @@
     <title>Title</title>
 </head>
 <body>
-<div layout:fragment="content1">
+<div layout:fragment="content_general">
     <div class="col-md-6 offset-3">
         <form method="post" th:action="@{/admin/save(page=${page}, keyword=${keyword})}">
             <div>

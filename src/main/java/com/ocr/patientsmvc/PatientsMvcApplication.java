@@ -2,10 +2,13 @@ package com.ocr.patientsmvc;
 
 import com.ocr.patientsmvc.model.Patient;
 import com.ocr.patientsmvc.repository.PatientRepository;
+import com.ocr.patientsmvc.security.service.SecurityService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 
@@ -14,6 +17,12 @@ public class PatientsMvcApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PatientsMvcApplication.class, args);
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+
+        return new BCryptPasswordEncoder();
     }
 
 /*    @Bean    //injecter PatientRepository
@@ -33,5 +42,26 @@ public class PatientsMvcApplication {
             });
         };
     }*/
+
+    @Bean
+    CommandLineRunner saveAppUsers(SecurityService securityService){
+        return args -> {
+            //en commentaire, déjà enregistrés
+            /*securityService.saveNewUser("Adil","1234","1234");
+            securityService.saveNewUser("Emet","1234","1234");
+            securityService.saveNewUser("Gulshen","1234","1234");*/
+
+            //en commentaire, déjà enregistrés
+           /* securityService.saveNewRole("ADMIN","Gestion tout");
+            securityService.saveNewRole("USER", "Consultation uniquement");
+
+            //en commentaire, déjà enregistrés
+            securityService.addRoleToUser("Adil","ADMIN");
+            securityService.addRoleToUser("Adil","USER");
+            securityService.addRoleToUser("Emet","USER");
+            securityService.addRoleToUser("Gulshen","USER");*/
+
+        };
+    }
 
 }
