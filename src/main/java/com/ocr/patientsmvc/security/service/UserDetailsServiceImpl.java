@@ -1,6 +1,8 @@
 package com.ocr.patientsmvc.security.service;
 
 import com.ocr.patientsmvc.security.model.AppUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,32 +19,43 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private SecurityService securityService;
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
+    private SecurityService securityService;
     public UserDetailsServiceImpl(SecurityService securityService) {
         this.securityService = securityService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        logger.debug("Load user by username is working...");
         AppUser appUser = securityService.loadUserByUsername(username);
 
-        //programmation impérative
-      /*  Collection<GrantedAuthority> authorities = new ArrayList<>();
+        if(appUser == null){
+            logger.debug("This username " + username + " doesn't exist in DB");
+            throw new UsernameNotFoundException("This user doesn't exist in DB");
+        }
+
+        //programmation impérative, pour chaque role on créé un objet de type SimpleGrantedAuthority, puis le rajouter dans la collection authorities
+      /*  Collection<GrantedAuthority> authorities1 = new ArrayList<>();
         appUser.getRoles().forEach( appRole -> {
                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appRole.getRoleName());
-                    authorities.add(authority);
+                    authorities1.add(authority);
         });*/
 
-        //programmation déclarative
+        //programmation déclarative, map() -> pour chaque appUser
         Collection<GrantedAuthority> authorities =
                 appUser.getRoles()
                         .stream()
                         .map(appRole -> new SimpleGrantedAuthority(appRole.getRoleName()))
                         .collect(Collectors.toList());
+        if(authorities.isEmpty()){
+            logger.debug("This user: "+ username + " has any role !");
+            throw new RuntimeException("This user has no role !");
+        }
 
         User user = new User(appUser.getUsername(), appUser.getPassword(), authorities);
-
+        logger.info("User: " + user + " is successfully authenticated");
         return user;
     }
 }

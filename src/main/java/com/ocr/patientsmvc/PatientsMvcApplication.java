@@ -19,8 +19,9 @@ public class PatientsMvcApplication {
         SpringApplication.run(PatientsMvcApplication.class, args);
     }
 
+    //Scanner par Spring chaque démarrage
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
@@ -43,9 +44,9 @@ public class PatientsMvcApplication {
         };
     }*/
 
-    @Bean
-    CommandLineRunner saveAppUsers(SecurityService securityService){
-        return args -> {
+   /* @Bean
+    CommandLineRunner saveAppUsers(SecurityService securityService) {
+        return args -> {*/
             //en commentaire, déjà enregistrés
             /*securityService.saveNewUser("Adil","1234","1234");
             securityService.saveNewUser("Emet","1234","1234");
@@ -60,8 +61,8 @@ public class PatientsMvcApplication {
             securityService.addRoleToUser("Adil","USER");
             securityService.addRoleToUser("Emet","USER");
             securityService.addRoleToUser("Gulshen","USER");*/
-
+/*
         };
-    }
+    }*/
 
 }

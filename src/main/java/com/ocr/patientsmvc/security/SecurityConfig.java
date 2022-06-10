@@ -25,9 +25,12 @@ import javax.sql.DataSource;
 import javax.xml.ws.soap.Addressing;
 
 /*
-https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
-Spring Security without the WebSecurityConfigurerAdapter
- */
+
+ Note: Authority avoir plusieurs rôles
+
+ https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+ Spring Security without the WebSecurityConfigurerAdapter
+*/
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -36,8 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     //In-Memory Authentication pour tester l'application utiliser la mémoire
   /*  @Bean
@@ -69,9 +70,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // https://www.baeldung.com/spring-security-jdbc-authentication
 
 
+    // Construction, vérification des users, étape Build
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-  /*      PasswordEncoder passwordEncoder = passwordEncoder();
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        /*
+         // Ces codes sont utilisés quand on n'as pas de class User et Role, mais que les tables users(username,pwd et active),
+         // roles(une colonne role) et users_roles(username,role)
+        PasswordEncoder passwordEncoder = passwordEncoder();
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select username as principal, password as credentials, active from users where username=?")
@@ -79,22 +85,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .rolePrefix("ROLE_")
                 .passwordEncoder(passwordEncoder);*/
 
-        //Authentification avec springboot userDetailsService
+        //Authentification avec spring-boot userDetailsService, spring security faire appel à la méthode de UserDetailsServiceImpl pour retourner un userDetails(User de Spring Security)
         auth.userDetailsService(userDetailsService);
 
     }
+
+    // Spécifier le droit d'accès
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http.formLogin();
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin(); // login par défaut
+        // http.formLogin().loginPage("/login"); // Une méthode(@GetMepping("/login")), Spécifier la page de login (le propre form)
         //Autoriser les users pour accéder à des pages
         http.authorizeHttpRequests().antMatchers("/").permitAll(); //ça ne nécessite pas à une authentification
-        http.authorizeHttpRequests().antMatchers("/admin/**").hasAuthority("ADMIN"); //pour les UserDetailsService
-        http.authorizeHttpRequests().antMatchers("/user/**").hasAuthority("USER");  //pour les UserDetailsService
+        http.authorizeHttpRequests().antMatchers("/admin/**").hasAuthority("ADMIN"); //pour les UserDetailsService, Spring Security, cela lie à Collection<GrantedAuthority>
+        http.authorizeHttpRequests().antMatchers("/user/**").hasAuthority("USER");  //pour les UserDetailsService, Spring Security
 
-        //Autoriser les ressources statics
+        // Autoriser les ressources statics
         http.authorizeHttpRequests().antMatchers("/webjars/**").permitAll();
 
         http.authorizeHttpRequests().anyRequest().authenticated();
+
+        // Gestion d'exception, qui retourne la page 403 avec la méthode -> @GetMapping("/403")
         http.exceptionHandling().accessDeniedPage("/403");
     }
 

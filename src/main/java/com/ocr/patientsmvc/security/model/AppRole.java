@@ -5,7 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "app_role")
 public class AppRole {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Long appRoleId;
 

@@ -10,7 +10,8 @@ import java.util.Date;
 @Entity
 @Table(name = "patient")
 public class Patient {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotEmpty

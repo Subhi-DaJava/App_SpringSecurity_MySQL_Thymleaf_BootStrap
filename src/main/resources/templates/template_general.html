@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-                xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
     <meta charset="UTF-8">
@@ -22,7 +22,7 @@
                 <a class="nav-link" href="#">Link</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" th:href="@{/manager/addRole}">Add Role</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Disabled</a>
@@ -31,7 +31,12 @@
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Patients</a>
                 <ul class="dropdown-menu">
                     <!--affichage uniquement pour les admins-->
-                    <li sec:authorize="hasAuthority('ADMIN')"><a class="dropdown-item" th:href="@{/admin/formPatients}">Nouveau Patient</a></li>
+<!--
+     Masquer le "Nouveau Patient"               <li sec:authorize="hasAuthority('ADMIN')"><a class="dropdown-item" th:href="@{/admin/formPatients}">Nouveau
+-->
+                    <!-- Afficher "Nouveau Patient, mais il est autorisé uniquement par Admin -->
+                    <li><a class="dropdown-item" th:href="@{/admin/formPatients}">Nouveau
+                        Patient</a></li>
                     <li><a class="dropdown-item" th:href="@{/user/index}">Chercher Patients</a></li>
                     <li><a class="dropdown-item" th:href="@{/user/medecins}">Médecin</a></li>
                 </ul>
@@ -39,9 +44,10 @@
         </ul>
 
         <ul class="navbar-nav">
-            <!--Affiché à droite, Authentification/logout/consulter le compte etc--> <!--ce menu (logout) s'affiche quand un user est authentifié-->
+            <!--Affiché à droite, Authentification/logout/consulter le compte etc-->
+            <!--ce menu (logout) s'affiche quand un user est authentifié-->
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                <a  class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                     <!--afficher le nom d'user-->
                     <span sec:authentication="name"></span>
                 </a>

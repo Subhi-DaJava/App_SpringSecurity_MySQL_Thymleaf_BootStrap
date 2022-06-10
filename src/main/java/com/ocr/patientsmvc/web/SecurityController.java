@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SecurityController {
 
     @GetMapping("/403")
-    public String notAuthorized(){
+    public String notAuthorized() {
         return "403";
     }
 }

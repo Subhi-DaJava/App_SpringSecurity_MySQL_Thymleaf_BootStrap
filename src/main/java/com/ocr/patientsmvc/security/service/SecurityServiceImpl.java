@@ -1,18 +1,27 @@
 package com.ocr.patientsmvc.security.service;
 
+import com.ocr.patientsmvc.exception.AppUserNotExistingException.AppUserNotExistingException;
 import com.ocr.patientsmvc.security.model.AppRole;
 import com.ocr.patientsmvc.security.model.AppUser;
 import com.ocr.patientsmvc.security.repository.AppRoleRepository;
 import com.ocr.patientsmvc.security.repository.AppUserRepository;
-import groovy.util.logging.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 @Service
 @Transactional
-@Slf4j //permettre à fournir un attribut log pour logger
+ //permettre à fournir un attribut log pour logger
 public class SecurityServiceImpl implements SecurityService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
+
     private AppUserRepository appUserRepository;
     private AppRoleRepository appRoleRepository;
     private PasswordEncoder passwordEncoder;
@@ -26,15 +35,24 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public AppUser saveNewUser(String username, String password, String rePassword) {
-        AppUser newAppUser = appUserRepository.findByUsername(username);
+        logger.debug("This method starts here");
+        AppUser newAppUser = appUserRepository.findByUsername(username); // username est unique
 
-        if (newAppUser != null)
-            throw new RuntimeException("Role "+newAppUser+" already exists !!"); // throw new AppUserExistingException("Role "+roleName+" already exists !!");
+        if (newAppUser != null) {
+            logger.info("This appUser is already in the DB !");
+            //Create a costume exception
+            throw new RuntimeException("Role: " + newAppUser + " already exists !!"); // throw new AppUserExistingException("Role "+roleName+" already exists !!");
+        }
 
-        if(!password.equals(rePassword))
+        if (!password.equals(rePassword)) {
+            logger.debug(rePassword + " does not match with " + password);
+            // Ideal, c'est de créer une exception personnalisée
             throw new RuntimeException("Password not match !!"); // throw new PasswordNotMatchException("Password not match !!"); is better !!
+        }
 
+        logger.info("PasswordEncoder is working...");
         String hashedPassword = passwordEncoder.encode(password);
+
         //Au cas où, si id est un String, on rajoute(set) un userId, newAppUser.setAppUserId(UUID.randomUUID().toString())
         newAppUser = new AppUser();
         newAppUser.setUsername(username);
@@ -48,10 +66,13 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public AppRole saveNewRole(String roleName, String description) {
-        AppRole newAppRole = appRoleRepository.findByRoleName(roleName);
+        logger.debug("This method starts here !");
+        AppRole newAppRole = appRoleRepository.findByRoleName(roleName); // roleName est unique
 
-        if (newAppRole != null)
-            throw new RuntimeException("Role "+roleName+" already exists !!"); // throw new RoleExistingException("Role "+roleName+" already exists !!");
+        if (newAppRole != null) {
+            logger.info("This role: " + roleName +" is already in the DB");
+            throw new RuntimeException("Role: " + roleName + " already exists !!"); // throw new RoleExistingException("Role "+roleName+" already exists !!");
+        }
 
         newAppRole = new AppRole();
 
@@ -65,40 +86,57 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void addRoleToUser(String username, String roleName) {
+        logger.debug("This method starts here");
         AppUser appUser = appUserRepository.findByUsername(username);
-        if(appUser == null)
-            throw new RuntimeException("AppUser "+username+" doesn't exist !! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
+
+        if (appUser == null) {
+            logger.debug("No this user " + username + " in the DB");
+            throw new RuntimeException("AppUser: " + username + " doesn't exist !! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
+        }
 
         AppRole appRole = appRoleRepository.findByRoleName(roleName);
-        if(appRole == null)
-            throw new RuntimeException("AppRole "+roleName+" doesn't exist !! "); //throw new AppRoleNotFoundException("AppRole "+appRole+" doesn't exist !!");
 
+        if (appRole == null) {
+            logger.debug("No this role: " + roleName + " in the DB");
+            throw new RuntimeException("AppRole " + roleName + " doesn't exist !! "); //throw new AppRoleNotFoundException("AppRole "+appRole+" doesn't exist !!");
+        }
+        logger.info("This role " +roleName+ " is added to this username "+username);
         appUser.getRoles().add(appRole);
 
-        //appUserRepository.save(appUser); // C'est pas nécessaire !!
+        //appUserRepository.save(appUser); // C'est pas nécessaire, grâce à l'annotation @Transactionnel, commit / rollback
     }
 
     @Override
     public void removeRoleFromUser(String username, String roleName) {
+        logger.debug("This method starts here.");
+
         AppUser appUser = appUserRepository.findByUsername(username);
-        if(appUser == null)
-            throw new RuntimeException("AppUser "+username+" doesn't exist !! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
+        if (appUser == null) {
+            logger.debug("No this user: " + username + " in the DB");
+            throw new RuntimeException("AppUser " + username + " doesn't exist !! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
+        }
 
         AppRole appRole = appRoleRepository.findByRoleName(roleName);
-        if(appRole == null)
-            throw new RuntimeException("AppRole "+roleName+" doesn't exist !! "); //throw new AppRoleNotFoundException("AppRole "+appRole+" doesn't exist !!");
+        if (appRole == null) {
+            logger.debug("No this role: " + roleName + " in the DB");
+            throw new RuntimeException("AppRole " + roleName + " doesn't exist !! "); //throw new AppRoleNotFoundException("AppRole "+appRole+" doesn't exist !!");
+        }
 
         appUser.getRoles().remove(appRole);
 
-        //appUserRepository.save(appUser); // C'est pas nécessaire !!
+        //appUserRepository.save(appUser); // C'est pas nécessaire, grâce à l'annotation @Transactionnel
 
     }
 
     @Override
     public AppUser loadUserByUsername(String username) {
+        logger.debug("This method starts here");
         AppUser appUser = appUserRepository.findByUsername(username);
-        if(appUser == null)
-            throw new RuntimeException("AppUser "+username+" doesn't exist !! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
+        if (appUser == null) {
+            logger.debug("This user: " + username + " doesn't exist in the DB");
+            throw new AppUserNotExistingException("AppUser " + username + " doesn't exist in the DB!! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
+        }
+        logger.info("This appUser: " + username + " is loaded ");
         return appUser;
     }
 }
