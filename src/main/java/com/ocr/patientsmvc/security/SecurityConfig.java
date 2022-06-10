@@ -94,11 +94,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin(); // login par défaut
-        // http.formLogin().loginPage("/login"); // Une méthode(@GetMepping("/login")), Spécifier la page de login (le propre form)
+        // http.formLogin().loginPage("/login"); // Une méthode(@GetMapping("/login")), Spécifier la page de login (le propre form)
         //Autoriser les users pour accéder à des pages
         http.authorizeHttpRequests().antMatchers("/").permitAll(); //ça ne nécessite pas à une authentification
         http.authorizeHttpRequests().antMatchers("/admin/**").hasAuthority("ADMIN"); //pour les UserDetailsService, Spring Security, cela lie à Collection<GrantedAuthority>
         http.authorizeHttpRequests().antMatchers("/user/**").hasAuthority("USER");  //pour les UserDetailsService, Spring Security
+        http.authorizeHttpRequests().antMatchers("/manager/**").hasAuthority("MANAGER");  //pour les UserDetailsService, Spring Security
 
         // Autoriser les ressources statics
         http.authorizeHttpRequests().antMatchers("/webjars/**").permitAll();
@@ -107,6 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Gestion d'exception, qui retourne la page 403 avec la méthode -> @GetMapping("/403")
         http.exceptionHandling().accessDeniedPage("/403");
+
     }
 
 /*    @Autowired

@@ -49,13 +49,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         .stream()
                         .map(appRole -> new SimpleGrantedAuthority(appRole.getRoleName()))
                         .collect(Collectors.toList());
+
         if(authorities.isEmpty()){
-            logger.debug("This user: "+ username + " has any role !");
-            throw new RuntimeException("This user has no role !");
+            logger.info("For the moment this user: "+ username + " has any role !!");
         }
 
         User user = new User(appUser.getUsername(), appUser.getPassword(), authorities);
-        logger.info("User: " + user + " is successfully authenticated");
         return user;
     }
 }

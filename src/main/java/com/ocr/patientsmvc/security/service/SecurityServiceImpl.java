@@ -1,6 +1,7 @@
 package com.ocr.patientsmvc.security.service;
 
-import com.ocr.patientsmvc.exception.AppUserNotExistingException.AppUserNotExistingException;
+import com.ocr.patientsmvc.exception.AppUserNotExistingException;
+import com.ocr.patientsmvc.exception.appUserExistingException;
 import com.ocr.patientsmvc.security.model.AppRole;
 import com.ocr.patientsmvc.security.model.AppUser;
 import com.ocr.patientsmvc.security.repository.AppRoleRepository;
@@ -8,7 +9,6 @@ import com.ocr.patientsmvc.security.repository.AppUserRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +41,7 @@ public class SecurityServiceImpl implements SecurityService {
         if (newAppUser != null) {
             logger.info("This appUser is already in the DB !");
             //Create a costume exception
-            throw new RuntimeException("Role: " + newAppUser + " already exists !!"); // throw new AppUserExistingException("Role "+roleName+" already exists !!");
+            throw new appUserExistingException("AppUser: " + username + " already exists !!"); // throw new AppUserExistingException("Role "+roleName+" already exists !!");
         }
 
         if (!password.equals(rePassword)) {
@@ -136,7 +136,6 @@ public class SecurityServiceImpl implements SecurityService {
             logger.debug("This user: " + username + " doesn't exist in the DB");
             throw new AppUserNotExistingException("AppUser " + username + " doesn't exist in the DB!! "); //throw new AppUserNotFoundException("AppUser "+username+" doesn't exist !!");
         }
-        logger.info("This appUser: " + username + " is loaded ");
         return appUser;
     }
 }

@@ -53,6 +53,12 @@ public class PatientController {
         return "home";
     }
 
+    @GetMapping("/home")
+    public String directHome() {
+
+        return "redirect:/";
+    }
+
     @GetMapping("/user/patients") //sérialiser, pour Angular, données fournées au format JSON
     @ResponseBody
     public List<Patient> listPatients() {
