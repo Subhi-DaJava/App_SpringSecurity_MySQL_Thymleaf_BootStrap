@@ -35,4 +35,6 @@ public interface SecurityService {
     //Find by appRoleId
 
     AppRole findAppRoleByAppRoleId(Long appRoleId);
+
+    AppRole saveAppRole(AppRole appRole);
 }

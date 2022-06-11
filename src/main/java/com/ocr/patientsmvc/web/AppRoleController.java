@@ -47,24 +47,20 @@ public class AppRoleController {
         return "/appRole/appRoles";
     }
 
-    /**
-     * Enregistrer un rôle dans la BDD
-     * @param model
-     * @param roleName
-     * @param description
-     * @return
-     */
+
     @PostMapping("/manager/addRole")
     public String addAppRole(Model model,
-                             @RequestParam(name = "roleName") String roleName,
-                             @RequestParam(name = "description") String description,
+                             AppRole appRole,
                              @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "") String keyword){
         logger.debug("This method addAppRole starts here");
 
-       securityService.saveNewRole(roleName, description);
+        if(appRole == null){
+            logger.debug("AppRole should not be null");
+        }
+        securityService.saveAppRole(appRole);
 
-       logger.info("model={}, roleNam={}, roelDescription={}", model, roleName, description);
+        logger.info("This appRole is saved");
 
         return "redirect:/manager/appRoles?page=" + page + "&keyword=" + keyword;
     }
