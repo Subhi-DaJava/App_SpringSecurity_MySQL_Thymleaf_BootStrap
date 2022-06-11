@@ -96,4 +96,29 @@ public class AppUserController {
         return "redirect:/";
     }
 
+    /**
+     * Afficher le formulaire pour rajouter un rôle à un AppUser en même temps faire apple l'action @PostMapping pour remplir et renvoyer le formulaire
+     * @param model
+     * @return
+     */
+    @GetMapping("manager/formAddRoleToAppUser")
+    public String addRoleToAppUser(Model model){
+
+        model.addAttribute("addRoleToUser", new AppUser());
+
+        return "/appUser/formAddRoleToAppUser";
+    }
+
+    @PostMapping("/manager/addRoleToUser")
+    public String addRoleToUser(Model model,
+                                @RequestParam String username,
+                                @RequestParam String roleName){
+        logger.debug("This addRoleToUser method starts here");
+
+        securityService.addRoleToUser(username, roleName);
+
+        logger.info("username={}, roleName={}", username, roleName);
+
+        return "redirect:/";
+    }
 }

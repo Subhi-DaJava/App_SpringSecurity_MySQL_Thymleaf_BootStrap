@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template_general"
+>
+<!--Au-dessous associé template_general avec patients-->
+<head>
+    <meta charset="UTF-8">
+    <title>Save AppUser</title>
+</head>
+<body>
+<div layout:fragment="content_general">
+    <div class="col-md-6 offset-3">
+        <form method="post" th:action="@{/manager/addRoleToUser}">
+
+            <div>
+                <!--afficher l'ID en fixe-->
+                <label>ID</label>
+                <label th:text="${addRoleToUser.appUserId}"></label>
+                <input class="form-control" type="hidden" name="id" th:value="${addRoleToUser.appUserId}">
+            </div>
+
+            <div class="mt-1">
+                <label for="username">App Username</label>
+                <input id="username" class="form-control mt-1" type="text" name="username" th:value="${addRoleToUser.username}">
+                <span class="text-danger" th:errors="${addRoleToUser.username}"></span>
+            </div>
+            <div class="mt-5 mb-3">
+                <label for="roleName">Role Name</label>
+                <input id="roleName" class="form-control mt-1" type="text" name="roleName">
+                <span class="text-danger" errors="roleName"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add The Role to the AppUser </button>
+        </form>
+
+    </div>
+
+</div>
+</body>
+</html>
