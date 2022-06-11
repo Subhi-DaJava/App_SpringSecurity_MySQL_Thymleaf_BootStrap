@@ -1,6 +1,5 @@
 package com.ocr.patientsmvc.web;
 
-import com.ocr.patientsmvc.model.Patient;
 import com.ocr.patientsmvc.security.model.AppRole;
 import com.ocr.patientsmvc.security.model.AppUser;
 import com.ocr.patientsmvc.security.service.SecurityService;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 
 @Controller
 public class AppUserController {
@@ -25,12 +22,20 @@ public class AppUserController {
     @Autowired
     private SecurityService securityService;
 
-    //afficher tous les appUser
-    @GetMapping(path = "/manager/index")
-    public String patients(Model model,
+    /**
+     * Afficher tous les appUsers par page
+     * @param model
+     * @param page
+     * @param size
+     * @param keyword
+     * @return
+     */
+    @GetMapping(path = "/manager/appUsers")
+    public String appUsers(Model model,
                            @RequestParam(name = "page", defaultValue = "0") int page,
                            @RequestParam(name = "size", defaultValue = "5") int size,
                            @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+        logger.debug("This method starts here");
 
         Page<AppUser> pageAppUsers = securityService.findByUsernameContains(keyword, PageRequest.of(page, size));
 
@@ -39,15 +44,13 @@ public class AppUserController {
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", keyword);
 
-        return "appUsers"; //c'est une vue
+        return "/appUser/appUsers"; //c'est une vue
     }
-
-
 
     @GetMapping("/manager/formAppUsers")
     public String formPatients(Model model) {
         model.addAttribute("appUser",new AppUser());
-        return "formAppUsers";
+        return "appUser/formAppUsers";
     }
 
 

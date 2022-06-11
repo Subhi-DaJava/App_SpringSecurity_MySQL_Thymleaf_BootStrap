@@ -7,7 +7,7 @@
 <!--Au-dessous associé template_general avec patients-->
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>App Roles</title>
 </head>
 <body>
 <div layout:fragment="content_general">
@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-header text-center"><h3>List des App Users</h3></div>
             <div class="card-body">
-                <form method="get" th:action="@{/manager/index}">
+                <form method="get" th:action="@{/manager/appRoles}">
                     <label>Key word</label>
                     <input type="text" name="keyword" th:value="${keyword}">
                     <button type="submit" class="btn btn-primary">Chercher</button>
@@ -25,29 +25,29 @@
                     <!-- Faut rajouter thead pour séparer tbody de thead, important pour Bootstrap 5 -->
                     <thead>
                     <tr>
-                        <th>APP USER ID</th>
-                        <th>USER NAME</th>
-                        <th>ACTIVE</th>
+                        <th>APP ROLE ID</th>
+                        <th>ROLE NAME</th>
+                        <th>DESCRIPTION</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="appUser:${listAppUsers}">
-                        <td th:text="${appUser.appUserId}"></td>
-                        <td th:text="${appUser.username}"></td>
-                        <td th:text="${appUser.active}"></td>
+                    <tr th:each="appRole:${listAppRoles}">
+                        <td th:text="${appRole.appRoleId}"></td>
+                        <td th:text="${appRole.roleName}"></td>
+                        <td th:text="${appRole.description}"></td>
                         <!--Afficher ce menu uniquement pour MANAGER-->
                         <td sec:authorize="hasAuthority('MANAGER')"> <!-- Remplacé hasRole('ROLE')-->
                             <a onclick="return confirm('Êtes vous sure de supprimer ce patient ?')"
                                class="btn btn-danger"
-                               th:href="@{/manager/delete(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
-                                Delete
+                               th:href="@{/manager/deleteAppRole(id=${appRole.appRoleId}, keyword=${keyword}, page=${currentPage})}">
+                                Delete AppRole
                             </a>
                         </td>
                         <!--Afficher ce menu uniquement pour MANAGER-->
                         <td sec:authorize="hasAuthority('MANAGER')">
                             <a class="btn btn-success"
-                               th:href="@{/manager/editAppUser(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
-                                Edit
+                               th:href="@{/manager/editAppRole(id=${appRole.appRoleId}, keyword=${keyword}, page=${currentPage})}">
+                                Edit AppRole
                             </a>
                         </td>
                     </tr>
@@ -57,7 +57,7 @@
                     <li th:each="page, status:${pages}">
                         <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
                            th:text="${status.index}"
-                           th:href="@{/manager/index(page=${status.index}, keyword=${keyword})}">
+                           th:href="@{/manager/appRoles(page=${status.index}, keyword=${keyword})}">
                         </a>
                     </li>
                 </ul>

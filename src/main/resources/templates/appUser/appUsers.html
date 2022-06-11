@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="template_general"
+>
+<!--Au-dessous associé template_general avec patients-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content_general">
+    <div class="container mt-3">
+        <div class="card">
+            <div class="card-header text-center"><h3>List des App Users</h3></div>
+            <div class="card-body">
+                <form method="get" th:action="@{/manager/index}">
+                    <label>Key word</label>
+                    <input type="text" name="keyword" th:value="${keyword}">
+                    <button type="submit" class="btn btn-primary">Chercher</button>
+
+                </form>
+                <table class="table">
+                    <!-- Faut rajouter thead pour séparer tbody de thead, important pour Bootstrap 5 -->
+                    <thead>
+                    <tr>
+                        <th>APP USER ID</th>
+                        <th>USER NAME</th>
+                        <th>ACTIVE</th>
+                        <th>Mot de Pass</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="appUser:${listAppUsers}">
+                        <td th:text="${appUser.appUserId}"></td>
+                        <td th:text="${appUser.username}"></td>
+                        <td th:text="${appUser.active}"></td>
+                        <td th:text="${appUser.password}"></td>
+                        <!--Afficher ce menu uniquement pour MANAGER-->
+                        <td sec:authorize="hasAuthority('MANAGER')"> <!-- Remplacé hasRole('ROLE')-->
+                            <a onclick="return confirm('Êtes vous sure de supprimer ce patient ?')"
+                               class="btn btn-danger"
+                               th:href="@{/manager/deleteAppUser(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
+                                Delete AppUser
+                            </a>
+                        </td>
+                        <!--Afficher ce menu uniquement pour MANAGER-->
+                        <td sec:authorize="hasAuthority('MANAGER')">
+                            <a class="btn btn-success"
+                               th:href="@{/manager/editAppUser(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
+                                Edit AppUser
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ul class="nav nav-pills">
+                    <li th:each="page, status:${pages}">
+                        <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
+                           th:text="${status.index}"
+                           th:href="@{/manager/appUsers(page=${status.index}, keyword=${keyword})}">
+                        </a>
+                    </li>
+                </ul>
+                <div class="mt-3 text-center">
+                    <a class="btn btn-primary" th:href="@{/}">Back to Home Page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -146,4 +146,9 @@ public class SecurityServiceImpl implements SecurityService {
     public Page<AppUser> findByUsernameContains(String keyword, Pageable pageable) {
         return appUserRepository.findByUsernameContains(keyword, pageable);
     }
+
+    @Override
+    public Page<AppRole> findByRoleNameContains(String keyword, Pageable pageable) {
+        return appRoleRepository.findByRoleNameContains(keyword, pageable);
+    }
 }
