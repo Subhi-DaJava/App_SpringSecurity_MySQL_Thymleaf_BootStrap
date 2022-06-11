@@ -2,6 +2,8 @@ package com.ocr.patientsmvc.web;
 
 import com.ocr.patientsmvc.model.Patient;
 import com.ocr.patientsmvc.repository.PatientRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 import java.util.List;
 
-
 @Controller
 public class PatientController {
+    private static final Logger logger = LoggerFactory.getLogger("PatientController.class");
+
     //l'injection de dépendance
     private PatientRepository patientRepository;
 
@@ -85,8 +88,11 @@ public class PatientController {
 
     @GetMapping("/admin/editPatient")
     public String editPatient(Model model, Long id, String keyword, int page) {
+        logger.debug("This methode editPatient starts here");
         Patient patient = patientRepository.findById(id).orElse(null);
+
         if (patient == null) {
+            logger.debug("Patient not found by this id:" + id);
             throw new RuntimeException("Patient introuvable !!");
         }
 

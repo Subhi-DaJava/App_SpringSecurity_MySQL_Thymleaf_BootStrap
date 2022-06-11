@@ -13,7 +13,7 @@
 <div layout:fragment="content_general">
     <div class="container mt-3">
         <div class="card">
-            <div class="card-header text-center"><h3>List des App Users</h3></div>
+            <div class="card-header text-center"><h3>List des AppUsers</h3></div>
             <div class="card-body">
                 <form method="get" th:action="@{/manager/index}">
                     <label>Key word</label>
@@ -39,7 +39,7 @@
                         <td th:text="${appUser.password}"></td>
                         <!--Afficher ce menu uniquement pour MANAGER-->
                         <td sec:authorize="hasAuthority('MANAGER')"> <!-- Remplacé hasRole('ROLE')-->
-                            <a onclick="return confirm('Êtes vous sure de supprimer ce patient ?')"
+                            <a onclick="return confirm('Êtes vous sure de supprimer ce appUser ?')"
                                class="btn btn-danger"
                                th:href="@{/manager/deleteAppUser(appUserId=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
                                 DeleteAppUser

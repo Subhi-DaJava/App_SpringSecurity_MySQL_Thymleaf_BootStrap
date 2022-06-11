@@ -7,8 +7,6 @@ import java.util.List;
 /**
  * Adil, Emet, Gulshen 1234
  */
-
-
 @Entity
 @Table(name = "app_user")
 public class AppUser {
@@ -77,4 +75,5 @@ public class AppUser {
     public void setRoles(List<AppRole> roles) {
         this.roles = roles;
     }
+
 }

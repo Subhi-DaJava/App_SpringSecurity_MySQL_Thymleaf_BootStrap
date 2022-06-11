@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
 @Transactional
  //permettre à fournir un attribut log pour logger
@@ -150,5 +149,35 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public Page<AppRole> findByRoleNameContains(String keyword, Pageable pageable) {
         return appRoleRepository.findByRoleNameContains(keyword, pageable);
+    }
+
+    @Override
+    public void deleteAppUserById(Long appUserId) {
+
+        appUserRepository.deleteById(appUserId);
+    }
+
+    /*
+        cette méthode n'est pas encore employée
+     */
+    @Override
+    public void deleteAppRoleById(Long appRoleId) {
+
+        appRoleRepository.deleteById(appRoleId);
+    }
+
+    //Find the AppRole by appRoleId
+    @Override
+    public AppRole findAppRoleByAppRoleId(Long appRoleId) {
+        logger.debug("This method findAppRoleByAppRoleId starts here");
+
+        AppRole appRole = appRoleRepository.findById(appRoleId).orElse(null);
+
+        if(appRole == null){
+            logger.debug("Not found appRole by this appRoleId: " + appRoleId);
+            throw new RuntimeException("AppRole by this appRoleId " + appRoleId + " doesn't exist in the DB");
+        }
+
+        return appRole;
     }
 }
