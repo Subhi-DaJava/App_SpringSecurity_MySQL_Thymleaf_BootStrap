@@ -13,9 +13,9 @@
 <div layout:fragment="content_general">
     <div class="container mt-3">
         <div class="card">
-            <div class="card-header text-center"><h3>List des patients</h3></div>
+            <div class="card-header text-center"><h3>List des App Users</h3></div>
             <div class="card-body">
-                <form method="get" th:action="@{/user/index}">
+                <form method="get" th:action="@{/manager/index}">
                     <label>Key word</label>
                     <input type="text" name="keyword" th:value="${keyword}">
                     <button type="submit" class="btn btn-primary">Chercher</button>
@@ -25,32 +25,28 @@
                     <!-- Faut rajouter thead pour séparer tbody de thead, important pour Bootstrap 5 -->
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Date</th>
-                        <th>Malade</th>
-                        <th>Score</th>
+                        <th>APP USER ID</th>
+                        <th>USER NAME</th>
+                        <th>ACTIVE</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="patient:${listPatients}">
-                        <td th:text="${patient.id}"></td>
-                        <td th:text="${patient.nom}"></td>
-                        <td th:text="${patient.dateNaissance}"></td>
-                        <td th:text="${patient.malade}"></td>
-                        <td th:text="${patient.score}"></td>
-                        <!--Afficher ce menu uniquement pour ADMIN-->
-                        <td sec:authorize="hasAuthority('ADMIN')"> <!-- Remplacé hasRole('ROLE')-->
+                    <tr th:each="appUser:${listAppUsers}">
+                        <td th:text="${appUser.appUserId}"></td>
+                        <td th:text="${appUser.username}"></td>
+                        <td th:text="${appUser.active}"></td>
+                        <!--Afficher ce menu uniquement pour MANAGER-->
+                        <td sec:authorize="hasAuthority('MANAGER')"> <!-- Remplacé hasRole('ROLE')-->
                             <a onclick="return confirm('Êtes vous sure de supprimer ce patient ?')"
                                class="btn btn-danger"
-                               th:href="@{/admin/delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}">
+                               th:href="@{/manager/delete(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
                                 Delete
                             </a>
                         </td>
-                        <!--Afficher ce menu uniquement pour ADMIN-->
-                        <td sec:authorize="hasAuthority('ADMIN')">
+                        <!--Afficher ce menu uniquement pour MANAGER-->
+                        <td sec:authorize="hasAuthority('MANAGER')">
                             <a class="btn btn-success"
-                               th:href="@{/admin/editPatient(id=${patient.id}, keyword=${keyword}, page=${currentPage})}">
+                               th:href="@{/manager/editAppUser(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
                                 Edit
                             </a>
                         </td>
@@ -61,7 +57,7 @@
                     <li th:each="page, status:${pages}">
                         <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
                            th:text="${status.index}"
-                           th:href="@{/user/index(page=${status.index}, keyword=${keyword})}">
+                           th:href="@{/manager/index(page=${status.index}, keyword=${keyword})}">
                         </a>
                     </li>
                 </ul>
