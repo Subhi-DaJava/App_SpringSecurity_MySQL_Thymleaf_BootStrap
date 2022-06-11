@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -44,6 +45,40 @@ public class AppRoleController {
         model.addAttribute("keyword", keyword);
 
         return "/appRole/appRoles";
+    }
+
+    /**
+     * Enregistrer un rôle dans la BDD
+     * @param model
+     * @param roleName
+     * @param description
+     * @return
+     */
+    @PostMapping("/manager/addRole")
+    public String addAppRole(Model model,
+                             @RequestParam String roleName,
+                             @RequestParam String description){
+        logger.debug("This method addAppRole starts here");
+
+       securityService.saveNewRole(roleName, description);
+
+       logger.info("model={}, roleNam={}, roelDescription={}", model, roleName, description);
+
+        return "redirect:/";
+    }
+
+    /**
+     * Afficher le formulaire pour enregistrer a new App rôle et faire appel l'action @PostMapping(addAppRole) -> paramètre==name="paramètre"
+     * @param model
+     * @return
+     */
+
+    @GetMapping("/manager/formAddRole")
+    public String addAppRole(Model model){
+
+        model.addAttribute("newRole", new AppRole());
+
+        return "/appRole/formAppRoles";
     }
 
 }
