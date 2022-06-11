@@ -35,7 +35,7 @@ public class AppUserController {
                            @RequestParam(name = "page", defaultValue = "0") int page,
                            @RequestParam(name = "size", defaultValue = "5") int size,
                            @RequestParam(name = "keyword", defaultValue = "") String keyword) {
-        logger.debug("This method starts here");
+        logger.debug("This show appUsers method starts here");
 
         Page<AppUser> pageAppUsers = securityService.findByUsernameContains(keyword, PageRequest.of(page, size));
 
@@ -81,13 +81,13 @@ public class AppUserController {
 
        securityService.saveNewUser(username, password, rePassword);
 
-        return "redirect:/";
+        return "redirect:/manager/appUsers";
     }
 
     @PostMapping("/manager/addRoleToAppUser")
     public String addRoleToAppUser(String username, String roleName){
         securityService.addRoleToUser(username,roleName);
-        return "redirect:/";
+        return "redirect:/manager/appUsers";
     }
 
     @PostMapping("/manager/removeRoleFromAppUser")
@@ -109,6 +109,14 @@ public class AppUserController {
         return "/appUser/formAddRoleToAppUser";
     }
 
+    /**
+     * Rajouter un rôle à un appUser
+     * @param model
+     * @param username
+     * @param roleName
+     * @return
+     */
+
     @PostMapping("/manager/addRoleToUser")
     public String addRoleToUser(Model model,
                                 @RequestParam String username,
@@ -119,6 +127,22 @@ public class AppUserController {
 
         logger.info("username={}, roleName={}", username, roleName);
 
-        return "redirect:/";
+        return "redirect:/manager/users-roles";
     }
+
+    /**
+     * Delete a AppUser
+     * @param appUserId
+     * @param keyword
+     * @param page
+     * @return
+     */
+    @GetMapping("/manager/deleteAppUser")
+    public String deleteAppUser(Long appUserId, String keyword, int page){
+
+        securityService.deleteAppUserById(appUserId);
+
+        return "redirect:/manager/appUsers?page=" + page + " &keyword=" + keyword;
+    }
+
 }

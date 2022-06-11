@@ -47,4 +47,9 @@ public class AppRole {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return  roleName + " : " + description;
+    }
 }

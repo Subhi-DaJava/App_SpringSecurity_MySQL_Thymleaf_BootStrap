@@ -26,4 +26,13 @@ public interface SecurityService {
     Page<AppUser> findByUsernameContains(String keyword, Pageable pageable);
 
     Page<AppRole> findByRoleNameContains(String keyword, Pageable pageable);
+
+    void deleteAppUserById(Long appUserId);
+
+    //Wait to creat
+    void deleteAppRoleById(Long appRoleId);
+
+    //Find by appRoleId
+
+    AppRole findAppRoleByAppRoleId(Long appRoleId);
 }

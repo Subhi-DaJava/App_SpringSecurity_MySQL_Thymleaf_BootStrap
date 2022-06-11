@@ -56,15 +56,17 @@ public class AppRoleController {
      */
     @PostMapping("/manager/addRole")
     public String addAppRole(Model model,
-                             @RequestParam String roleName,
-                             @RequestParam String description){
+                             @RequestParam(name = "roleName") String roleName,
+                             @RequestParam(name = "description") String description,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "") String keyword){
         logger.debug("This method addAppRole starts here");
 
        securityService.saveNewRole(roleName, description);
 
        logger.info("model={}, roleNam={}, roelDescription={}", model, roleName, description);
 
-        return "redirect:/";
+        return "redirect:/manager/appRoles?page=" + page + "&keyword=" + keyword;
     }
 
     /**
@@ -74,11 +76,28 @@ public class AppRoleController {
      */
 
     @GetMapping("/manager/formAddRole")
-    public String addAppRole(Model model){
+    public String saveAppRole(Model model){
 
         model.addAttribute("newRole", new AppRole());
 
         return "/appRole/formAppRoles";
+    }
+
+    @GetMapping("/manager/editAppRole")
+    public String editAppRole(Model model, Long appRoleId, String keyword, int page){
+        logger.debug("This method editAppRole starts here");
+        AppRole appRole = securityService.findAppRoleByAppRoleId(appRoleId);
+
+        if(appRole == null){
+            logger.debug("This appRole doesn't exist in the DB by this appRoleI: "+ appRoleId);
+            throw new RuntimeException("This appRoleId: " + appRoleId+" doesn't exist in the DB");
+        }
+
+        model.addAttribute("appRole", appRole);
+        model.addAttribute("page", page);
+        model.addAttribute("keyword", keyword);
+
+        return "appRole/formEditAppRole";
     }
 
 }
