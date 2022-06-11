@@ -41,17 +41,24 @@
                         <td sec:authorize="hasAuthority('MANAGER')"> <!-- Remplacé hasRole('ROLE')-->
                             <a onclick="return confirm('Êtes vous sure de supprimer ce patient ?')"
                                class="btn btn-danger"
-                               th:href="@{/manager/deleteAppUser(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
-                                Delete AppUser
+                               th:href="@{/manager/deleteAppUser(appUserId=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
+                                DeleteAppUser
                             </a>
                         </td>
                         <!--Afficher ce menu uniquement pour MANAGER-->
                         <td sec:authorize="hasAuthority('MANAGER')">
                             <a class="btn btn-success"
-                               th:href="@{/manager/editAppUser(id=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
-                                Edit AppUser
+                               th:href="@{/manager/editAppUser(appUserId=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
+                                EditAppUser
                             </a>
                         </td>
+                        <td sec:authorize="hasAuthority('MANAGER')">
+                            <a class="btn btn-success"
+                               th:href="@{/manager/formAddRoleToAppUser(appUserId=${appUser.appUserId}, keyword=${keyword}, page=${currentPage})}">
+                                AddRoleToAppUser
+                            </a>
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
