@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="template_general"
+>
+<!--Au-dessous associé template_general avec patients-->
+<head>
+    <meta charset="UTF-8">
+    <title>500</title>
+</head>
+<body>
+<div layout:fragment="content_general">
+    <!--Renvoyé cette page pour les users non autoriser-->
+    <div class="container">
+        <div class="mt-5 text-center">
+            <h2 class="text-danger">Bad Credentials!!!</h2>
+        </div>
+        <div class="mt-5 text-center">
+            <p class="text text-danger" th:text="${status}"></p>
+            <a class="btn btn-primary " th:href="@{/}">Please press and back to home page</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
