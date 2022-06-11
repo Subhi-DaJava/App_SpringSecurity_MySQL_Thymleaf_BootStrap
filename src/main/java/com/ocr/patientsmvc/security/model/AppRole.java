@@ -10,7 +10,7 @@ public class AppRole {
     @Column(name = "role_id")
     private Long appRoleId;
 
-    @Column(name = "role_name", unique = true)
+    @Column(name = "role_name", unique = true, length = 100)
     private String roleName;
 
     private String description;

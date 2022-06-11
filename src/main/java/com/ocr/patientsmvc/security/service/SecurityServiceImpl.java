@@ -180,4 +180,36 @@ public class SecurityServiceImpl implements SecurityService {
 
         return appRole;
     }
+
+    /**
+     * Créer et mettre à jour un AppRole
+     * @param appRole
+     * @return
+     */
+    @Override
+    public AppRole saveAppRole(AppRole appRole) {
+        logger.debug("This method saveAppRole starts here");
+        AppRole candidatUpdate = findAppRoleByAppRoleId(appRole.getAppRoleId());
+        if(candidatUpdate !=  null){
+            candidatUpdate.setRoleName(appRole.getRoleName());
+            candidatUpdate.setDescription(appRole.getDescription());
+            logger.info("Updated successfully");
+            return candidatUpdate;
+        }
+
+        if(appRole == null){
+            logger.debug("AppRole should not be null");
+            throw new RuntimeException("AppRole should not be null");
+        }
+
+        AppRole newAppRole = new AppRole();
+
+        newAppRole.setRoleName(appRole.getRoleName());
+        newAppRole.setDescription(appRole.getDescription());
+
+        AppRole savedAppRole = appRoleRepository.save(newAppRole);
+        logger.info("AppRole: " + savedAppRole + " is saved");
+
+        return savedAppRole;
+    }
 }
