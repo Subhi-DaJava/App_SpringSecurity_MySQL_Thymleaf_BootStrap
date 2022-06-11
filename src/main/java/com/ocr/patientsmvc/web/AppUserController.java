@@ -47,13 +47,25 @@ public class AppUserController {
         return "/appUser/appUsers"; //c'est une vue
     }
 
+    /**
+     *  Form for adding the new app user
+     * @param model
+     * @return
+     */
     @GetMapping("/manager/formAppUsers")
-    public String formPatients(Model model) {
+    public String formAppUsers(Model model) {
         model.addAttribute("appUser",new AppUser());
         return "appUser/formAppUsers";
     }
 
-
+    /**
+     * Save a new appUser
+     * @param model
+     * @param username
+     * @param password
+     * @param rePassword
+     * @return
+     */
     @PostMapping("/manager/saveAppUser")
     public String saveAppUser(Model model,
                               @RequestParam String username,
@@ -68,14 +80,6 @@ public class AppUserController {
         logger.info("model={},username={},password={},rePassord={}", model,username,password,rePassword);
 
        securityService.saveNewUser(username, password, rePassword);
-
-        return "redirect:/";
-    }
-
-    @PostMapping("/manager/addRole")
-    public String addRole(String roleName, String roleDescription){
-
-        AppRole newAppRole = securityService.saveNewRole(roleName, roleDescription);
 
         return "redirect:/";
     }
