@@ -3,9 +3,7 @@
 ## Spring-Boot: <version>2.6.8</version>
 ## Spring-Security: <version>5.6.5</version>
 
-### @Configuration
-### @EnableWebSecurity
-### SpingSecurityConfige --> extends WebSecurityConfigurerAdapter, déjà `deprecated` à partir de la version 5.7 de Spring Secrity 
+### Configuration EnableWebSecurity SpingSecurityConfige --> extends WebSecurityConfigurerAdapter, déjà `deprecated` à partir de la version 5.7 de Spring Secrity 
 
 ## Démarrage d'Application 
 
