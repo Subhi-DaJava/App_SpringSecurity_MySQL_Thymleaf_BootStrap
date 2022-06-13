@@ -13,4 +13,7 @@ public interface AppRoleRepository extends JpaRepository<AppRole, Long> {
     AppRole findByRoleName(String roleName);
     // Retourner les AppRoles avec la page et le mot de recherche
     Page<AppRole> findByRoleNameContains(String keyword, Pageable pageable);
+
+    AppRole findAppRoleByRoleName(String roleName);
+
 }

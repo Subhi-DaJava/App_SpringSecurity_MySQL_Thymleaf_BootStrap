@@ -1,6 +1,5 @@
 package com.ocr.patientsmvc.web;
 
-import com.ocr.patientsmvc.security.model.AppRole;
 import com.ocr.patientsmvc.security.model.AppUser;
 import com.ocr.patientsmvc.security.service.SecurityService;
 
@@ -71,12 +70,6 @@ public class AppUserController {
                               @RequestParam String username,
                               @RequestParam String password,
                               @RequestParam String rePassword){
-   /*     if (!password.equals(rePassword)){
-            return "passwordNotMatch";
-        }
-        if(username ==  null || !username.equals(securityService.loadUserByUsername(username))){
-            return "usernameIssue";
-        }*/
         logger.info("model={},username={},password={},rePassord={}", model,username,password,rePassword);
 
        securityService.saveNewUser(username, password, rePassword);

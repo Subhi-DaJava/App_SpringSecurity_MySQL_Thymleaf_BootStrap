@@ -142,6 +142,16 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
+    public AppRole loadAppRoleByRoleName(String roleName) {
+        logger.debug("This method loadAppRoleByRoleName starts here");
+        AppRole appRoleCheck = appRoleRepository.findAppRoleByRoleName(roleName);
+        if(appRoleCheck == null){
+            logger.info("This roleName: " + roleName + " doesn't exist in the DB");
+        }
+        return appRoleCheck;
+    }
+
+    @Override
     public Page<AppUser> findByUsernameContains(String keyword, Pageable pageable) {
         return appUserRepository.findByUsernameContains(keyword, pageable);
     }
@@ -189,19 +199,17 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public AppRole saveAppRole(AppRole appRole) {
         logger.debug("This method saveAppRole starts here");
-        AppRole candidatUpdate = findAppRoleByAppRoleId(appRole.getAppRoleId());
-        if(candidatUpdate !=  null){
+        AppRole candidatUpdate = loadAppRoleByRoleName(appRole.getRoleName());
+        if(candidatUpdate != null){
             candidatUpdate.setRoleName(appRole.getRoleName());
             candidatUpdate.setDescription(appRole.getDescription());
             logger.info("Updated successfully");
-            return candidatUpdate;
+            return appRoleRepository.save(candidatUpdate);
         }
-
-        if(appRole == null){
+        if(appRole == null || appRole.getRoleName().isEmpty()){
             logger.debug("AppRole should not be null");
             throw new RuntimeException("AppRole should not be null");
         }
-
         AppRole newAppRole = new AppRole();
 
         newAppRole.setRoleName(appRole.getRoleName());
@@ -212,4 +220,10 @@ public class SecurityServiceImpl implements SecurityService {
 
         return savedAppRole;
     }
+
+    @Override
+    public List<AppRole> findAllAppRoles() {
+        return appRoleRepository.findAll();
+    }
+
 }
