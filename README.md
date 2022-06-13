@@ -5,17 +5,35 @@
 
 ### @Configuration
 ### @EnableWebSecurity
-### SpingSecurityConfige --> extends WebSecurityConfigurerAdapter
+### SpingSecurityConfige --> extends WebSecurityConfigurerAdapter, déjà `deprecated` à partir de la version 5.7 de Spring Secrity 
 
 ## Démarrage d'Application 
+
 ## Étape 1: Cloner le code sur la branche `app`
 ## Étape 2: Configurer `application.properties` (url, username et password --> la connexion avec la bdd) 
-### Étape 2: Créé une BDD avec MySQL(ou avec un autre), puis exécuter les requêtes dans `schema.sql` (dasn le dossier ressource/data) pour créer les tables
-### Étape 3: Exécuter les requêtes dasn `data.sql` (dasn le dossier ressource/data) pour insérer les données 
+### Étape 3: Créé une BDD avec MySQL(ou avec un autre), puis exécuter les requêtes dans `schema.sql` (sur la bdd de donnée créée à l'étape 3) pour créer les tables
+### Étape 4: Exécuter les requêtes dasn `data.sql` pour insérer les données 
+### Étape 5: Démarrer l'app (PatientMvcApplication.java), puis se rendre sur le navigateur puis saisir `http://localhost:8091/` (par défaut)
+### Étape 6: Entrer un `utilisateur` et son `mot de passe` (Note*)
 
-### Les mots de passe enregistrés dans la base de données, sont cryptés (BCryptés), tous pareil: un, deux, trois et quatre, en chiffre arabique sans espace entre eux
+### Utilisation de l'application --> 
 
-### Captures d'écran de l'app 
+#### 1) Rajouter les patients(Certains utilisateurs ont le droit, idem pour le rest)
+#### 2) Editer les patients
+#### 3) Supprimer les patients
+#### 4) Rajouter les AppUsers
+#### 5) Supprimer les AppUsers
+#### 6) Rajouter les AppRoles
+#### 7) Assigner un rôle à un AppUser
+#### 8) Mettre à jour un AppRole
+#### 9) Rechercher les patients par un mot clé 
+#### 10) Rechercher les appUsers et les AppRoles par un mot clé 
+
+### Note*:
+#### schema.sql et data.sql se trouvent dasn le dossier resources/data
+#### Les mots de passe enregistrés dans la base de données, sont cryptés (encodé avec BCrypt) tous pareil: un, deux, trois et quatre, en chiffre arabique sans espace entre eux.
+
+### Captures d'écran de l'App 
 
 ![listPatients](https://user-images.githubusercontent.com/90509456/173341338-6c610bec-78b9-412f-a09a-0c77bce204b4.jpg)
 ![createNewPatient](https://user-images.githubusercontent.com/90509456/173341382-abd5ce05-f899-4df5-8dfc-1ba81d9cbdbd.jpg)
