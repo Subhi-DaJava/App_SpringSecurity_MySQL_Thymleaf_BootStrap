@@ -11,6 +11,8 @@
 <body>
 <div layout:fragment="content_general">
     <div class="col-md-6 offset-3">
+        <div class="mt-3 mb-3 text text-center"><h3>Edit a Patient </h3></div>
+
         <form method="post" th:action="@{/admin/save(page=${page}, keyword=${keyword})}">
             <div>
                 <!--afficher l'ID en fixe-->
