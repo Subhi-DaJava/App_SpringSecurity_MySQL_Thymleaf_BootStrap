@@ -12,8 +12,9 @@
 <body>
 <div layout:fragment="content_general">
     <div class="col-md-6 offset-3">
+        <div class="mt-3 mb-3 text text-center"><h3>Add A New AppRole </h3></div>
         <form method="post" th:action="@{/manager/addRole}">
-            <div class="mt-5">
+            <div class="mt-3">
                 <label for="roleName">App Role Name</label>
                 <input id="roleName" class="form-control mt-1" type="text" name="roleName" th:value="${newRole.roleName}">
                 <span class="text-danger" th:errors="${newRole.roleName}"></span>

@@ -12,8 +12,9 @@
 <body>
 <div layout:fragment="content_general">
     <div class="col-md-6 offset-3">
+        <div class="mt-3 text text-center"><h3>Add A New AppUser </h3></div>
         <form method="post" th:action="@{/manager/saveAppUser}">
-            <div class="mt-5">
+            <div class="mt-3">
                 <label for="username">App username</label>
                 <input id="username" class="form-control mt-1" type="text" name="username" th:value="${appUser.username}">
                 <span class="text-danger" th:errors="${appUser.username}"></span>
