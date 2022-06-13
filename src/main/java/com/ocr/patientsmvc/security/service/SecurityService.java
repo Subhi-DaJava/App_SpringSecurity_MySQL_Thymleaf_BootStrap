@@ -6,6 +6,8 @@ import com.ocr.patientsmvc.security.model.AppUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface SecurityService {
 
     // Enregistrer un nouvel user dans la bdd
@@ -23,6 +25,9 @@ public interface SecurityService {
     // Chercher/trouver un user par son username
     AppUser loadUserByUsername(String username);
 
+    // Chercher / trouver / vérifier l'existence d'appRole par son roleName
+    AppRole loadAppRoleByRoleName(String roleName);
+
     Page<AppUser> findByUsernameContains(String keyword, Pageable pageable);
 
     Page<AppRole> findByRoleNameContains(String keyword, Pageable pageable);
@@ -37,4 +42,6 @@ public interface SecurityService {
     AppRole findAppRoleByAppRoleId(Long appRoleId);
 
     AppRole saveAppRole(AppRole appRole);
+
+    List<AppRole> findAllAppRoles();
 }

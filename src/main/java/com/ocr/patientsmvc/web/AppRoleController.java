@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class AppRoleController {
     private static final Logger logger = LoggerFactory.getLogger(AppRoleController.class);
@@ -54,9 +56,9 @@ public class AppRoleController {
                              @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "") String keyword){
         logger.debug("This method addAppRole starts here");
-
-        if(appRole == null){
+        if(appRole == null || appRole.getRoleName().isEmpty()){
             logger.debug("AppRole should not be null");
+            throw new RuntimeException("The roleName should not be null");
         }
         securityService.saveAppRole(appRole);
 

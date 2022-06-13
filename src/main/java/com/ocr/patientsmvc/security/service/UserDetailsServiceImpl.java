@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         AppUser appUser = securityService.loadUserByUsername(username);
 
         if(appUser == null){
-            logger.debug("This username " + username + " doesn't exist in DB");
+            logger.debug("This username " + username + "doesn't exist in DB");
             throw new UsernameNotFoundException("This user doesn't exist in DB");
         }
 
